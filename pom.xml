@@ -38,5 +38,11 @@
 			<version>2.6</version>
 			<scope>compile</scope>
 		</dependency>
+		
+		<dependency>
+		  <groupId>com.qcloud.json</groupId>
+		  <artifactId>json_jdk</artifactId>
+		  <version>1.7</version>
+		</dependency>
 	</dependencies>
 </project>

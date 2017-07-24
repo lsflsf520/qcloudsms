@@ -23,27 +23,26 @@ public class SmsSDKDemo {
     		String phoneNumber1 = "17773132069";
 //    		String phoneNumber2 = "12345678902";
 //    		String phoneNumber3 = "12345678903";
-    		int tmplId = 7839;
+    		int tmplId = 30217;
 
     		 //初始化单发
 	    	SmsSingleSender singleSender = new SmsSingleSender(appid, appkey);
 	    	SmsSingleSenderResult singleSenderResult;
 	
 	    	 //普通单发
-	    	singleSenderResult = singleSender.send(0, "86", phoneNumber1, "您注册的验证码：1234", "", "");
-	    	System.out.println(singleSenderResult);
+//	    	singleSenderResult = singleSender.send(0, "86", phoneNumber1, "您注册的验证码：1234", "", "");
+//	    	System.out.println(singleSenderResult);
 	
 	    	 //指定模板单发
 	    	 //假设短信模板 id 为 1，模板内容为：测试短信，{1}，{2}，{3}，上学。
-	    	/*ArrayList<String> params = new ArrayList<>();
-	    	params.add("指定模板单发");
-	    	params.add("深圳");
-	    	params.add("小明");
-	    	singleSenderResult = singleSender.sendWithParam("86", phoneNumber2, tmplId, params, "", "", "");
+	    	ArrayList<String> params = new ArrayList<String>();
+	    	params.add("6379");
+	    	params.add("2");
+	    	singleSenderResult = singleSender.sendWithParam("86", phoneNumber1, tmplId, params, "三联中读", "", "");
 	    	System.out.println(singleSenderResult);
 	    	
 	    	// 初始化群发
-	    	SmsMultiSender multiSender = new SmsMultiSender(appid, appkey);
+	    	/*SmsMultiSender multiSender = new SmsMultiSender(appid, appkey);
 	    	SmsMultiSenderResult multiSenderResult;
 	
 	    	// 普通群发

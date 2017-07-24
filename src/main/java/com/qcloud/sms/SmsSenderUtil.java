@@ -10,6 +10,10 @@ import java.util.Random;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.qcloud.sms.SmsMultiSenderResult.Detail;
+import com.qcloud.sms.SmsStatusPullCallbackResult.Callback;
+import com.qcloud.sms.SmsStatusPullReplyResult.Reply;
+
 class SmsSenderUtil {
 
     protected Random random = new Random();
@@ -91,7 +95,7 @@ class SmsSenderUtil {
     		long random,
     		long curTime,    		
     		String phoneNumber) throws NoSuchAlgorithmException {
-    	ArrayList<String> phoneNumbers = new ArrayList<>();
+    	ArrayList<String> phoneNumbers = new ArrayList<String>();
     	phoneNumbers.add(phoneNumber);
     	return calculateSigForTempl(appkey, random, curTime, phoneNumbers);
     }
@@ -142,7 +146,7 @@ class SmsSenderUtil {
     		return result;
     	}
     	
-    	result.details = new ArrayList<>();    	
+    	result.details = new ArrayList<Detail>();    	
     	JSONArray details = json.getJSONArray("detail");
     	for (int i = 0; i < details.length(); i++) {
     		JSONObject jsonDetail = details.getJSONObject(i);
@@ -171,7 +175,7 @@ class SmsSenderUtil {
     	if (true == json.isNull("data")) {
     		return result;
     	}
-    	result.callbacks = new ArrayList<>();  
+    	result.callbacks = new ArrayList<Callback>();  
     	JSONArray datas  = json.getJSONArray("data");
     	for(int index = 0 ; index< datas.length(); index++){
     			JSONObject cb = datas.getJSONObject(index);
@@ -200,7 +204,7 @@ class SmsSenderUtil {
     		return result;
     	}
     	
-    	result.replys = new ArrayList<>();  
+    	result.replys = new ArrayList<Reply>();  
     	JSONArray datas  = json.getJSONArray("data");
     	for(int index = 0 ; index< datas.length(); index++){
     			JSONObject reply_json = datas.getJSONObject(index);
