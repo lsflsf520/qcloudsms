@@ -15,11 +15,28 @@ public class SmsSingleSender {
 	String appkey;
     String url = "https://yun.tim.qq.com/v5/tlssmssvr/sendsms";
 	
+    private static SmsSingleSender smsSender = null;
 	SmsSenderUtil util = new SmsSenderUtil();
 
-	public SmsSingleSender(int appid, String appkey) throws Exception {
+	private SmsSingleSender(int appid, String appkey) throws Exception {
 		this.appid = appid;
 		this.appkey = appkey;
+	}
+	
+	public static SmsSingleSender getInstance(int appId, String appKey){
+		if(smsSender == null){
+			synchronized (SmsSingleSender.class) {
+				if(smsSender == null){
+					try {
+						smsSender = new SmsSingleSender(appId, appKey);
+					} catch (Exception e) {
+						throw new RuntimeException("init SmsSingleSender with appId:"+appId + ",appKey:" + appKey +" error", e);
+					}
+				}
+			}
+		}
+		
+		return smsSender;
 	}
 
 	/**
@@ -32,37 +49,36 @@ public class SmsSingleSender {
 	 * @param ext 服务端原样返回的参数，可填空
 	 * @return {@link}SmsSingleSenderResult
 	 * @throws Exception
+	 * 
+		请求包体
+		{
+		    "tel": {
+		        "nationcode": "86", 
+		        "mobile": "13788888888"
+		    },
+		    "type": 0, 
+		    "msg": "你的验证码是1234", 
+		    "sig": "fdba654e05bc0d15796713a1a1a2318c", 
+		    "time": 1479888540,
+		    "extend": "",
+		    "ext": ""
+		}
+		应答包体
+		{
+		    "result": 0,
+		    "errmsg": "OK", 
+		    "ext": "", 
+		    "sid": "xxxxxxx", 
+		    "fee": 1
+		}
 	 */
-	public SmsSingleSenderResult send(
+	/*public SmsSingleSenderResult send(
 			int type,
 			String nationCode,
 			String phoneNumber,
 			String msg,
 			String extend,
 			String ext) throws Exception {
-/*
-请求包体
-{
-    "tel": {
-        "nationcode": "86", 
-        "mobile": "13788888888"
-    },
-    "type": 0, 
-    "msg": "你的验证码是1234", 
-    "sig": "fdba654e05bc0d15796713a1a1a2318c", 
-    "time": 1479888540,
-    "extend": "",
-    "ext": ""
-}
-应答包体
-{
-    "result": 0,
-    "errmsg": "OK", 
-    "ext": "", 
-    "sid": "xxxxxxx", 
-    "fee": 1
-}
-*/
 		// 校验 type 类型
 		if (0 != type && 1 != type) {
 			throw new Exception("type " + type + " error");
@@ -124,6 +140,45 @@ public class SmsSingleSender {
         }
         
         return result;
+	}*/
+	
+	/**
+	 * 发送国内短信
+	 * @param phone
+	 * @param templId
+	 * @param params
+	 * @param sign 短信签名。如果填空，系统会使用默认签名
+	 * @return
+	 */
+	public SmsSingleSenderResult sendSms(String phone,
+			int templId,
+			ArrayList<String> params,
+			String sign){
+		
+		return sendSms("86", phone, templId, params, sign);
+	}
+	
+	/**
+	 * 发送国际短信
+	 * @param nationCode
+	 * @param phone
+	 * @param templId
+	 * @param params
+	 * @param sign 短信签名。如果填空，系统会使用默认签名
+	 * @return
+	 */
+	public SmsSingleSenderResult sendSms(String nationCode,
+			String phone,
+			int templId,
+			ArrayList<String> params,
+			String sign){
+		
+		try {
+			return sendWithParam(nationCode, phone, templId, params, sign, "", "");
+		} catch (Exception e) {
+			throw new RuntimeException("send sms error, nationCode:"+nationCode + ",phone:" + phone + ",templId:" + templId + ",params:" + params + ",sign:" + sign, e);
+		}
+		
 	}
 
 	/**
@@ -137,8 +192,34 @@ public class SmsSingleSender {
 	 * @param ext 服务端原样返回的参数，可填空
 	 * @return {@link}SmsSingleSenderResult
 	 * @throws Exception
+	 * 请求包体
+		{
+		    "tel": {
+		        "nationcode": "86", 
+		        "mobile": "13788888888"
+		    }, 
+		    "sign": "腾讯云", 
+		    "tpl_id": 19, 
+		    "params": [
+		        "验证码", 
+		        "1234", 
+		        "4"
+		    ], 
+		    "sig": "fdba654e05bc0d15796713a1a1a2318c",
+		    "time": 1479888540,
+		    "extend": "", 
+		    "ext": ""
+		}
+		应答包体
+		{
+		    "result": 0,
+		    "errmsg": "OK", 
+		    "ext": "", 
+		    "sid": "xxxxxxx", 
+		    "fee": 1
+		}
 	 */
-	public SmsSingleSenderResult sendWithParam(
+	private SmsSingleSenderResult sendWithParam(
 			String nationCode,
 			String phoneNumber,
 			int templId,
@@ -146,34 +227,6 @@ public class SmsSingleSender {
 			String sign,
 			String extend,
 			String ext) throws Exception {
-/*
-请求包体
-{
-    "tel": {
-        "nationcode": "86", 
-        "mobile": "13788888888"
-    }, 
-    "sign": "腾讯云", 
-    "tpl_id": 19, 
-    "params": [
-        "验证码", 
-        "1234", 
-        "4"
-    ], 
-    "sig": "fdba654e05bc0d15796713a1a1a2318c",
-    "time": 1479888540,
-    "extend": "", 
-    "ext": ""
-}
-应答包体
-{
-    "result": 0,
-    "errmsg": "OK", 
-    "ext": "", 
-    "sid": "xxxxxxx", 
-    "fee": 1
-}
-*/
 		if (null == nationCode || 0 == nationCode.length()) {
 			nationCode = "86";
 		}

@@ -21,24 +21,18 @@ public class SmsSDKDemo {
     		String appkey = "5b2409119992bfcd78b83ac1984b8269";
     		
     		String phoneNumber1 = "17773132069";
-//    		String phoneNumber2 = "12345678902";
-//    		String phoneNumber3 = "12345678903";
     		int tmplId = 30217;
 
     		 //初始化单发
-	    	SmsSingleSender singleSender = new SmsSingleSender(appid, appkey);
+	    	SmsSingleSender singleSender = SmsSingleSender.getInstance(appid, appkey);
 	    	SmsSingleSenderResult singleSenderResult;
-	
-	    	 //普通单发
-//	    	singleSenderResult = singleSender.send(0, "86", phoneNumber1, "您注册的验证码：1234", "", "");
-//	    	System.out.println(singleSenderResult);
 	
 	    	 //指定模板单发
 	    	 //假设短信模板 id 为 1，模板内容为：测试短信，{1}，{2}，{3}，上学。
 	    	ArrayList<String> params = new ArrayList<String>();
 	    	params.add("6379");
 	    	params.add("2");
-	    	singleSenderResult = singleSender.sendWithParam("86", phoneNumber1, tmplId, params, "三联中读", "", "");
+	    	singleSenderResult = singleSender.sendSms(phoneNumber1, tmplId, params, "三联中读");
 	    	System.out.println(singleSenderResult);
 	    	
 	    	// 初始化群发

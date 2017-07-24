@@ -3,6 +3,7 @@ package com.qcloud.sms;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class GuoMaLoader {
 				}
 				String[] parts = line.split("\\s+");
 				if(parts.length == 3){
-					guomaMap.put(parts[0], new GuoMa(parts[0], parts[1], parts[2]));
+					guomaMap.put(parts[0].trim(), new GuoMa(parts[0].trim(), parts[1].trim(), parts[2].trim()));
 				} else {
 					LOG.warn("illegal line " + line);
 				}
@@ -39,9 +40,49 @@ public class GuoMaLoader {
 		}
 	}
 	
+	/**
+	 * 根据国家精确匹配，获取对应的国码
+	 * @param country
+	 * @return
+	 */
 	public static String loadGuoma(String country){
 		GuoMa guoma = guomaMap.get(country);
+		
 		return guoma == null ? "" : guoma.getGuoma();
+	}
+	
+	/**
+	 * 根据国家关键字，模糊匹配国家和国码的对应关系
+	 * @param kword
+	 * @return
+	 */
+	public static List<GuoMa> searchGuoma(String kword){
+		List<GuoMa> guomas = new ArrayList<GuoMa>();
+		for(String key : guomaMap.keySet()){
+			if(key.contains(kword)){
+				GuoMa guoma = guomaMap.get(key);
+				if(guoma != null && StringUtils.isNotBlank(guoma.getGuoma())){
+					guomas.add(guoma);
+				}
+			}
+		}
+		return guomas;
+	}
+	
+	/**
+	 * 查询所有的国家及其对应的国码列表
+	 * @return
+	 */
+	public static List<GuoMa> loadAllGuomas(){
+		List<GuoMa> guomas = new ArrayList<GuoMa>();
+		for(String country : guomaMap.keySet()){
+			GuoMa guoma = guomaMap.get(country);
+			if(guoma != null && StringUtils.isNotBlank(guoma.getGuoma())){
+				guomas.add(guoma);
+			}
+		}
+		
+		return guomas;
 	}
 	
 	private static String getPath(String fileName) {
