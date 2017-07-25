@@ -21,7 +21,7 @@ public class SmsSDKDemo {
     		String appkey = "5b2409119992bfcd78b83ac1984b8269";
     		
     		String phoneNumber1 = "17773132069";
-    		int tmplId = 30217;
+    		int tmplId = 30373;
 
     		 //初始化单发
 	    	SmsSingleSender singleSender = SmsSingleSender.getInstance(appid, appkey);
