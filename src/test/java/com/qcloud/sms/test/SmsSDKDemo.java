@@ -1,23 +1,14 @@
 package com.qcloud.sms.test;
-import java.util.ArrayList;
+import java.util.List;
 
-import com.qcloud.sms.SmsMultiSender;
-import com.qcloud.sms.SmsMultiSenderResult;
-import com.qcloud.sms.SmsSingleSender;
-import com.qcloud.sms.SmsSingleSenderResult;
-import com.qcloud.sms.SmsStatusPuller;
-import com.qcloud.sms.SmsStatusPullCallbackResult;
-import com.qcloud.sms.SmsStatusPullReplyResult;
-import com.qcloud.sms.SmsVoiceVerifyCodeSender;
-import com.qcloud.sms.SmsVoiceVerifyCodeSenderResult;
-import com.qcloud.sms.SmsVoicePromptSender;
-import com.qcloud.sms.SmsVoicePromptSenderResult;
+import com.qcloud.sms.GuoMaLoader;
+import com.qcloud.sms.GuoMaLoader.GuoMa;
 
 public class SmsSDKDemo {
     public static void main(String[] args) {
     	try {
     		//请根据实际 appid 和 appkey 进行开发，以下只作为演示 sdk 使用
-    		int appid = 1400035341;
+    		/*int appid = 1400035341;
     		String appkey = "5b2409119992bfcd78b83ac1984b8269";
     		
     		String phoneNumber1 = "17773132069";
@@ -33,7 +24,7 @@ public class SmsSDKDemo {
 	    	params.add("6379");
 	    	params.add("2");
 	    	singleSenderResult = singleSender.sendSms(phoneNumber1, tmplId, params, "三联中读");
-	    	System.out.println(singleSenderResult);
+	    	System.out.println(singleSenderResult);*/
 	    	
 	    	// 初始化群发
 	    	/*SmsMultiSender multiSender = new SmsMultiSender(appid, appkey);
@@ -75,7 +66,8 @@ public class SmsSDKDemo {
     		SmsVoiceVerifyCodeSenderResult smsVoiceVerifyCodeSenderResult = smsVoiceVerifyCodeSender.send("86",phoneNumber1, "123",2,"");
     		System.out.println(smsVoiceVerifyCodeSenderResult);*/
 			
-    		
+    		List<GuoMa> guomaList=GuoMaLoader.loadAllGuomas();
+    		System.out.println(guomaList.size());
     	} catch (Exception e) {
 			e.printStackTrace();
 		}

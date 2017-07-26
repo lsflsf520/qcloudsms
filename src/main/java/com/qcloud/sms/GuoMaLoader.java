@@ -23,6 +23,11 @@ public class GuoMaLoader {
 	static {
 		String configpath = getPath("guoma.txt");
 		try {
+			if(configpath.startsWith("file:\\")){
+				configpath = configpath.replaceFirst("file:\\", "");
+			} else if(configpath.startsWith("file:/")){
+				configpath = configpath.replaceFirst("file:/", "");
+			}
 			List<String> lines = FileUtils.readLines(new File(configpath), "UTF-8");
 			for(String line : lines){
 				if(StringUtils.isBlank(line)){
