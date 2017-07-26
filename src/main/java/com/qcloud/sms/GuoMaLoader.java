@@ -1,14 +1,19 @@
 package com.qcloud.sms;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,14 +26,9 @@ public class GuoMaLoader {
 	private final static Map<String/*country*/, GuoMa> guomaMap = new HashMap<String, GuoMa>();
 	
 	static {
-		String configpath = getPath("guoma.txt");
+//		String configpath = getPath("guoma.txt");
 		try {
-			if(configpath.startsWith("file:\\")){
-				configpath = configpath.replaceFirst("file:\\", "");
-			} else if(configpath.startsWith("file:/")){
-				configpath = configpath.replaceFirst("file:/", "");
-			}
-			List<String> lines = FileUtils.readLines(new File(configpath), "UTF-8");
+			List<String> lines = getFileLines();
 			for(String line : lines){
 				if(StringUtils.isBlank(line)){
 					continue;
@@ -41,7 +41,7 @@ public class GuoMaLoader {
 				}
 			}
 		} catch (IOException e) {
-			LOG.error("load file " + configpath + " error", e);
+			LOG.error("load file config file guoma.txt error", e);
 		}
 	}
 	
@@ -88,6 +88,20 @@ public class GuoMaLoader {
 		}
 		
 		return guomas;
+	}
+	
+	private static List<String> getFileLines() throws IOException{
+		InputStream is = GuoMaLoader.class.getResourceAsStream("/guoma.txt");
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+		String line = null;
+		
+		List<String> lines = new ArrayList<String>();
+		while((line = reader.readLine()) != null ){
+			lines.add(line);
+		}
+
+		return lines;
+
 	}
 	
 	private static String getPath(String fileName) {
